@@ -3124,5 +3124,9 @@ document.body.appendChild(document.getElementById('modelList'));
     btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
   });
 </script>
+  <script>
+  if('serviceWorker' in navigator)
+    navigator.serviceWorker.register('/sw.js');
+</script>
 </body>
 </html>
