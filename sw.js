@@ -8,7 +8,11 @@ const OFFLINE_ASSETS = [
   '/favicon.png',
   '/favicon-192.png',
   '/manifest.json',
-  '/auth.js'
+  '/auth.js',
+  '/python/',
+  '/html-css/',
+  '/javascript/',
+  '/404.html'
 ];
 
 // Install — cache important files
