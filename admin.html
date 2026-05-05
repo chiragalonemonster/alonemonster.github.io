@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta property="og:url" content="https://alone-monster.github.io/admin.html"/>
+<meta property="og:description" content="Admin panel — Alone Monster Coding Hub."/>
+<meta name="twitter:title" content="Admin — Alone Monster Coding Hub"/>
+<meta name="twitter:description" content="Admin panel — Alone Monster Coding Hub."/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4YPW7T4WGN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -503,5 +507,14 @@
 
   <!-- ===== Admin Logout button auto-injector ===== -->
   <script src="admin_logout.js"></script>
+  <script>
+  if('serviceWorker' in navigator)
+    navigator.serviceWorker.register('/sw.js');
+</script>
+
+<script>
+window.addEventListener('offline',()=>{const t=document.createElement('div');t.textContent='📡 You are offline';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ff3366;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);});
+window.addEventListener('online',()=>{const t=document.createElement('div');t.textContent='✅ Back online!';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);setTimeout(()=>t.remove(),3000);});
+</script>
 </body>
 </html>
