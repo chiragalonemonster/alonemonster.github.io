@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<meta property="og:url" content="https://alone-monster.github.io/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:description" content="Free coding courses — JavaScript, Python, HTML/CSS with live editor and AI chatbot. Built by Chirag."/>
+<meta name="twitter:title" content="Alone Monster Coding Hub"/>
+<meta name="twitter:description" content="Free JS, Python, HTML/CSS courses with live editor and AI chatbot. 100% free by Chirag."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com"/>
 <link rel="preconnect" href="https://www.gstatic.com"/>
@@ -1552,14 +1557,14 @@ document.body.appendChild(document.getElementById('modelList'));
   }
   document.addEventListener('DOMContentLoaded',setAvatar);
   if(window.firebase && firebase.auth){
-    try{firebase.auth().onAuthStateChanged(function(){setAvatar();});}catch(e){}
+    try{firebase.auth(). onAuthStateChanged(function(){setAvatar();});}catch(e){}
   }
   window.addEventListener('storage',function(e){if(e.key==='amch_profile_photo')setAvatar();});
 })();
 </script>
 <!-- Admin logout button auto-injector (only shows when admin session active) -->
 <script src="admin_logout.js"></script>
-  <!-- PWA Service Worker -->
+<!-- PWA Service Worker -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -1568,6 +1573,33 @@ document.body.appendChild(document.getElementById('modelList'));
         .catch(err => console.log('SW error:', err));
     });
   }
+</script>
+<style>
+  #btt{position:fixed;bottom:185px;right:22px;z-index:398;width:44px;height:44px;border-radius:50%;border:1px solid rgba(0,255,136,.3);background:rgba(0,255,136,.08);color:#00ff88;font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(0,255,136,.15);transition:all .2s;}
+  #btt:hover{background:rgba(0,255,136,.2);transform:translateY(-2px);}
+</style>
+<button id="btt" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+<script>
+  const btt=document.getElementById('btt');
+  window.addEventListener('scroll',()=>{btt.style.display=window.scrollY>400?'flex':'none';});
+  btt.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Is Alone Monster Coding Hub free?","acceptedAnswer":{"@type":"Answer","text":"Yes! All courses are completely free — Python, JavaScript, HTML & CSS."}},
+    {"@type":"Question","name":"What courses are available?","acceptedAnswer":{"@type":"Answer","text":"Python A to Z (30 chapters), JavaScript A to Z (14 lessons), and HTML & CSS — all with live code editor and AI chatbot."}},
+    {"@type":"Question","name":"Who made Alone Monster Coding Hub?","acceptedAnswer":{"@type":"Answer","text":"Alone Monster Coding Hub was built by Chirag — a passionate developer from India."}}
+  ]
+}
+</script>
+
+<script>
+window.addEventListener('offline',()=>{const t=document.createElement('div');t.textContent='📡 You are offline';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ff3366;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);});
+window.addEventListener('online',()=>{const t=document.createElement('div');t.textContent='✅ Back online!';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);setTimeout(()=>t.remove(),3000);});
 </script>
 </body>
 </html>
