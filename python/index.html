@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <meta property="og:url" content="https://alone-monster.github.io/python/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:description" content="Learn Python from scratch — 30 chapters, 55 projects, live editor. Free course by Alone Monster Coding Hub."/>
+<meta name="twitter:title" content="Python Course — Alone Monster Coding Hub"/>
+<meta name="twitter:description" content="Complete Python A to Z — 30 chapters, live editor, 55 real projects. 100% free."/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4YPW7T4WGN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -3134,6 +3139,21 @@ document.body.appendChild(document.getElementById('modelList'));
 <script>
   if('serviceWorker' in navigator)
     navigator.serviceWorker.register('/sw.js');
+</script>
+<style>
+  #btt{position:fixed;bottom:185px;right:22px;z-index:398;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,45,135,.3);background:rgba(255,45,135,.08);color:#ff2d87;font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;}
+  #btt:hover{background:rgba(255,45,135,.2);transform:translateY(-2px);}
+</style>
+<button id="btt" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+<script>
+  const btt=document.getElementById('btt');
+  window.addEventListener('scroll',()=>{btt.style.display=window.scrollY>400?'flex':'none';});
+  btt.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+
+<script>
+window.addEventListener('offline',()=>{const t=document.createElement('div');t.textContent='📡 You are offline';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ff3366;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);});
+window.addEventListener('online',()=>{const t=document.createElement('div');t.textContent='✅ Back online!';t.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 22px;border-radius:50px;font-family:JetBrains Mono,monospace;font-size:.8rem;z-index:9999;';document.body.appendChild(t);setTimeout(()=>t.remove(),3000);});
 </script>
 </body>
 </html>
