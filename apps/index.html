@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Apps — Alone Monster</title>
+<meta name="description" content="All apps by Alone Monster — tools, utilities, and resources for developers and tech enthusiasts."/>
+<meta property="og:title" content="Apps — Alone Monster"/>
+<meta property="og:description" content="All apps by Alone Monster — tools, utilities, and resources for developers."/>
+<meta property="og:url" content="https://alone-monster.github.io/apps/"/>
+<meta name="theme-color" content="#00ff88"/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#050509;--bg2:#0c0c14;--bgc:#10101c;--bgs:#08080f;
+  --green:#00ff88;--cyan:#00d4ff;
+  --text:#e8e8f0;--muted:#6b6b8a;
+  --border:rgba(0,255,136,.15);
+  --gg:0 0 20px rgba(0,255,136,.45);
+  --gc:0 0 20px rgba(0,212,255,.45);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;min-height:100vh;
+}
+@media(hover:hover){body{cursor:none;}}
+
+/* CURSOR */
+#cursor{position:fixed;width:10px;height:10px;background:var(--green);border-radius:50%;pointer-events:none;z-index:8998;transform:translate(-50%,-50%);transition:transform .08s;mix-blend-mode:screen;}
+#cursor.big{transform:translate(-50%,-50%) scale(2.6);}
+
+/* MATRIX */
+#mc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:.04;pointer-events:none;}
+
+/* CLICK RIPPLE */
+.ripple{position:fixed;width:60px;height:60px;border-radius:50%;border:2px solid var(--green);pointer-events:none;z-index:8999;transform:translate(-50%,-50%) scale(0);opacity:1;animation:rout 1.5s ease-out forwards;}
+@keyframes rout{0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}100%{transform:translate(-50%,-50%) scale(4.8);opacity:0;}}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:150;
+  background:rgba(5,5,9,.97);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:60px;width:100%;
+}
+.tb-logo{
+  font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;
+  color:var(--green);text-shadow:var(--gg);letter-spacing:1px;
+  text-decoration:none;
+}
+.tb-logo span{color:var(--cyan);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.tb-back{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  color:var(--muted);text-decoration:none;
+  border:1px solid var(--border);border-radius:5px;
+  padding:7px 14px;display:flex;align-items:center;gap:7px;
+  transition:all .18s;
+}
+.tb-back:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06);}
+.tb-home{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  color:var(--muted);text-decoration:none;
+  border:1px solid rgba(0,212,255,.3);border-radius:5px;
+  padding:7px 14px;display:flex;align-items:center;gap:7px;
+  transition:all .18s;
+}
+.tb-home:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06);}
+
+/* PAGE HERO */
+.page-hero{
+  padding:64px 52px 44px;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.hgrid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,255,136,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.028) 1px,transparent 1px);
+  background-size:50px 50px;animation:gmove 22s linear infinite;pointer-events:none;
+}
+@keyframes gmove{to{background-position:50px 50px;}}
+@keyframes fup{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+.page-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--green);letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:14px;animation:fup .5s .1s both;
+}
+.page-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(2rem,5vw,3.6rem);font-weight:900;
+  line-height:1.08;margin-bottom:13px;animation:fup .5s .2s both;
+}
+.page-title .g{color:var(--green);text-shadow:var(--gg);}
+.page-title .c{color:var(--cyan);text-shadow:var(--gc);}
+.page-desc{
+  font-size:1rem;color:var(--muted);max-width:520px;
+  line-height:1.7;animation:fup .5s .3s both;
+}
+.page-desc b{color:var(--text);}
+
+/* SEARCH */
+.search-wrap{
+  padding:32px 52px 0;
+  animation:fup .5s .4s both;
+}
+.search-box{
+  display:flex;align-items:center;gap:0;
+  max-width:520px;
+  background:var(--bgc);
+  border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;transition:border-color .2s,box-shadow .2s;
+}
+.search-box:focus-within{border-color:rgba(0,255,136,.45);box-shadow:0 0 0 3px rgba(0,255,136,.08);}
+.search-box i{
+  padding:0 16px;font-size:.9rem;color:var(--muted);flex-shrink:0;
+}
+.search-input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:500;
+  color:var(--text);padding:13px 0;
+}
+.search-input::placeholder{color:var(--muted);}
+.search-clear{
+  background:transparent;border:none;color:var(--muted);
+  padding:0 14px;cursor:pointer;font-size:.85rem;
+  display:none;transition:color .18s;
+}
+.search-clear.vis{display:block;}
+.search-clear:hover{color:var(--green);}
+
+/* STATS BAR */
+.stats-bar{
+  padding:18px 52px;
+  display:flex;align-items:center;gap:24px;
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  color:var(--muted);letter-spacing:1px;
+  border-bottom:1px solid var(--border);
+}
+.stats-bar .sc{color:var(--green);font-weight:700;}
+.stats-bar .dot{width:4px;height:4px;background:var(--border);border-radius:50%;}
+
+/* APPS GRID */
+.apps-section{padding:40px 52px 80px;}
+.section-label{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;
+  margin-bottom:24px;opacity:.7;
+}
+.apps-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+
+/* APP CARD */
+.app-card{
+  background:var(--bgc);border:1px solid var(--border);border-radius:14px;
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:0;
+  position:relative;overflow:hidden;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  text-decoration:none;color:var(--text);
+}
+.app-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+  transform:scaleX(0);transform-origin:left;transition:transform .28s;
+}
+.app-card:hover{
+  border-color:rgba(0,255,136,.38);
+  transform:translateY(-5px);
+  box-shadow:0 16px 48px rgba(0,0,0,.45),var(--gg);
+}
+.app-card:hover::before{transform:scaleX(1);}
+
+.app-logo{
+  width:64px;height:64px;border-radius:14px;
+  background:linear-gradient(135deg,#1a2e1a,#0d1a0d);
+  border:1px solid rgba(0,255,136,.25);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;font-size:2rem;
+  box-shadow:0 0 20px rgba(0,255,136,.12);
+  flex-shrink:0;
+}
+.app-logo.termux-logo{
+  background:linear-gradient(135deg,#0a1a0a,#051205);
+  border-color:rgba(0,255,136,.35);
+}
+.app-logo img{width:44px;height:44px;object-fit:contain;border-radius:8px;}
+
+.app-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  padding:3px 10px;border-radius:20px;margin-bottom:12px;
+  background:rgba(0,255,136,.1);color:var(--green);
+  border:1px solid rgba(0,255,136,.22);letter-spacing:1px;
+  width:fit-content;
+}
+.app-badge.tool{background:rgba(0,212,255,.08);color:var(--cyan);border-color:rgba(0,212,255,.22);}
+
+.app-name{
+  font-family:'Orbitron',monospace;font-size:1.08rem;font-weight:700;
+  margin-bottom:8px;letter-spacing:.5px;
+}
+.app-tagline{
+  font-size:.82rem;color:var(--muted);line-height:1.6;
+  margin-bottom:18px;flex:1;
+}
+.app-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.app-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  padding:3px 9px;border-radius:4px;
+  background:rgba(0,212,255,.06);color:#6b6b8a;
+  border:1px solid rgba(0,212,255,.15);
+}
+.app-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 0;border-radius:7px;
+  background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);
+  color:var(--green);font-family:'Rajdhani',sans-serif;
+  font-weight:700;font-size:.86rem;letter-spacing:.8px;
+  text-decoration:none;transition:all .18s;
+}
+.app-btn:hover{background:rgba(0,255,136,.15);box-shadow:var(--gg);border-color:var(--green);}
+
+/* NO RESULTS */
+.no-results{
+  text-align:center;padding:80px 20px;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--muted);font-size:.78rem;letter-spacing:1px;
+  display:none;
+}
+.no-results i{font-size:2.5rem;display:block;margin-bottom:14px;opacity:.3;}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 52px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--muted);flex-wrap:wrap;gap:12px;
+}
+footer span{color:var(--green);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .page-hero,.search-wrap,.stats-bar,.apps-section{padding-left:20px;padding-right:20px;}
+  .page-hero{padding-top:40px;padding-bottom:30px;}
+  .page-title{font-size:2rem;}
+  footer{padding:18px 20px;}
+  .topbar{padding:0 16px;}
+}
+@media(max-width:480px){
+  .apps-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<canvas id="mc"></canvas>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="tb-logo" href="https://alone-monster.github.io/">ALONE<span>MONSTER</span></a>
+  <div class="tb-right">
+    <a class="tb-home" href="https://alone-monster.github.io/"><i class="fas fa-terminal"></i> Home</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hgrid"></div>
+  <div class="page-tag">// alone-monster · apps</div>
+  <h1 class="page-title"><span class="g">All</span> <span class="c">Apps</span></h1>
+  <p class="page-desc">Curated tools, utilities, and resources for <b>developers</b> and <b>tech enthusiasts</b>. Handpicked by Chirag.</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search apps..." oninput="filterApps()" autocomplete="off"/>
+    <button class="search-clear" id="searchClear" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <span>TOTAL <span class="sc" id="totalCount">1</span> APP</span>
+  <div class="dot"></div>
+  <span>RESULTS <span class="sc" id="resultCount">1</span></span>
+  <div class="dot"></div>
+  <span>BY <span class="sc">CHIRAG</span></span>
+</div>
+
+<!-- APPS -->
+<section class="apps-section">
+  <div class="section-label">// available apps</div>
+  <div class="apps-grid" id="appsGrid">
+
+    <!-- TERMUX -->
+    <div class="app-card" data-name="termux terminal linux android emulator">
+      <div class="app-logo termux-logo">
+        <img src="https://raw.githubusercontent.com/termux/termux-app/master/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="Termux"/>
+        <span style="display:none;font-size:1.6rem;">⬛</span>
+      </div>
+      <div class="app-badge"><i class="fas fa-circle" style="font-size:.4rem;"></i> FREE</div>
+      <div class="app-name">Termux</div>
+      <p class="app-tagline">A powerful terminal emulator and Linux environment for Android — no root required. Run Python, Node.js, git and hundreds of Linux packages right on your phone.</p>
+      <div class="app-tags">
+        <span class="app-tag">Terminal</span>
+        <span class="app-tag">Linux</span>
+        <span class="app-tag">Android</span>
+        <span class="app-tag">CLI</span>
+      </div>
+      <a class="app-btn" href="https://alone-monster.github.io/apps/termux">
+        <i class="fas fa-arrow-right"></i> View Details &amp; Download
+      </a>
+    </div>
+
+  </div>
+
+  <div class="no-results" id="noResults">
+    <i class="fas fa-search"></i>
+    No apps found for your search.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>alone-monster</span> $ ls apps/ — <span id="yr"></span>
+  <div>Built by <span>Chirag</span> · Alone Monster Coding Hub</div>
+</footer>
+
+<script>
+/* YEAR */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* CURSOR */
+const cur = document.getElementById('cursor');
+if(window.matchMedia('(hover:hover)').matches){
+  document.addEventListener('mousemove', e => { cur.style.left = e.clientX+'px'; cur.style.top = e.clientY+'px'; });
+  document.querySelectorAll('a,button,.app-card,.app-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+} else { cur.style.display = 'none'; }
+
+/* CLICK RIPPLE */
+document.addEventListener('click', function(e){
+  const r = document.createElement('div'); r.className = 'ripple';
+  r.style.left = e.clientX+'px'; r.style.top = e.clientY+'px';
+  document.body.appendChild(r); setTimeout(() => r.remove(), 1600);
+});
+
+/* MATRIX RAIN */
+const cv = document.getElementById('mc'), cx = cv.getContext('2d');
+function rsz(){ cv.width = window.innerWidth; cv.height = window.innerHeight; }
+rsz(); window.addEventListener('resize', rsz);
+const ch = '01アイウエオABCDEFG<>{}[]=+-*/';
+const fs = 14; let dr = Array(Math.floor(window.innerWidth/fs)).fill(1);
+setInterval(() => {
+  cx.fillStyle = 'rgba(5,5,9,.05)'; cx.fillRect(0,0,cv.width,cv.height);
+  cx.fillStyle = '#00ff88'; cx.font = fs+'px monospace';
+  dr.forEach((y,i) => { cx.fillText(ch[Math.floor(Math.random()*ch.length)], i*fs, y*fs); if(y*fs > cv.height && Math.random()>.975) dr[i]=0; dr[i]++; });
+}, 55);
+
+/* SEARCH */
+const cards = document.querySelectorAll('.app-card');
+function filterApps(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const clr = document.getElementById('searchClear');
+  clr.classList.toggle('vis', q.length > 0);
+  let visible = 0;
+  cards.forEach(c => {
+    const match = c.dataset.name.includes(q);
+    c.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  document.getElementById('resultCount').textContent = visible;
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+}
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  filterApps();
+  document.getElementById('searchInput').focus();
+}
+
+/* SCROLL REVEAL */
+const rv = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+}, {threshold:.08});
+document.querySelectorAll('.app-card').forEach(el => {
+  el.style.opacity = '0'; el.style.transform = 'translateY(18px)';
+  el.style.transition = 'opacity .44s ease,transform .44s ease';
+  rv.observe(el);
+});
+</script>
+</body>
+</html>
