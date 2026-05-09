@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>VS Code on Mobile via Termux — Alone Monster</title>
+<meta name="description" content="Complete guide to using VS Code on Android using Termux. Installation, setup, commands, extensions and live coding from your phone."/>
+<meta property="og:title" content="VS Code on Mobile Using Termux — Alone Monster"/>
+<meta property="og:image" content="https://alone-monster.github.io/youtube/thumbnail-vscode-termux.png"/>
+<meta property="og:url" content="https://alone-monster.github.io/youtube/article-1/"/>
+<meta name="theme-color" content="#00ff88"/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#050509;--bg2:#0c0c14;--bgc:#10101c;--bgs:#08080f;
+  --green:#00ff88;--cyan:#00d4ff;
+  --text:#e8e8f0;--muted:#6b6b8a;
+  --border:rgba(0,255,136,.15);
+  --gg:0 0 20px rgba(0,255,136,.45);
+  --gc:0 0 20px rgba(0,212,255,.45);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;}
+@media(hover:hover){body{cursor:none;}}
+#cursor{position:fixed;width:10px;height:10px;background:var(--green);border-radius:50%;pointer-events:none;z-index:8998;transform:translate(-50%,-50%);transition:transform .08s;mix-blend-mode:screen;}
+#cursor.big{transform:translate(-50%,-50%) scale(2.6);}
+#mc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:.04;pointer-events:none;}
+.ripple{position:fixed;width:60px;height:60px;border-radius:50%;border:2px solid var(--green);pointer-events:none;z-index:8999;transform:translate(-50%,-50%) scale(0);opacity:1;animation:rout 1.5s ease-out forwards;}
+@keyframes rout{0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}100%{transform:translate(-50%,-50%) scale(4.8);opacity:0;}}
+@keyframes fup{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes gmove{to{background-position:50px 50px;}}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(5,5,9,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;width:100%;}
+.tb-logo{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;color:var(--green);text-shadow:var(--gg);letter-spacing:1px;text-decoration:none;}
+.tb-logo span{color:var(--cyan);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.tb-link{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);border-radius:5px;padding:7px 14px;display:flex;align-items:center;gap:7px;transition:all .18s;}
+.tb-link:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06);}
+.tb-link.cyan{border-color:rgba(0,212,255,.3);}
+.tb-link.cyan:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06);}
+
+/* BREADCRUMB */
+.breadcrumb{padding:12px 52px;font-family:'JetBrains Mono',monospace;font-size:.61rem;color:var(--muted);letter-spacing:1px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1;}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s;}
+.breadcrumb a:hover{color:var(--green);}
+.breadcrumb .sep{opacity:.4;}
+.breadcrumb .cur{color:var(--green);}
+
+/* SEARCH BAR (links to youtube tutorial index) */
+.article-search-wrap{
+  padding:20px 52px;
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:10;
+  background:rgba(5,5,9,.6);
+}
+.article-search-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.search-box{display:flex;align-items:center;max-width:560px;background:var(--bgc);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .2s,box-shadow .2s;}
+.search-box:focus-within{border-color:rgba(0,255,136,.5);box-shadow:0 0 0 3px rgba(0,255,136,.08);}
+.search-box i{padding:0 14px;font-size:.88rem;color:var(--muted);flex-shrink:0;}
+.search-input{flex:1;background:transparent;border:none;outline:none;font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:500;color:var(--text);padding:12px 0;}
+.search-input::placeholder{color:var(--muted);}
+.search-go{background:rgba(0,255,136,.1);border:none;border-left:1px solid var(--border);color:var(--green);padding:0 16px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:1px;height:100%;transition:all .18s;}
+.search-go:hover{background:rgba(0,255,136,.2);}
+.search-hint{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);margin-top:8px;opacity:.6;letter-spacing:.8px;}
+
+/* SEARCH RESULTS OVERLAY */
+.search-results{
+  position:absolute;left:52px;right:52px;top:calc(100% - 8px);
+  background:rgba(8,8,15,.98);border:1px solid rgba(0,255,136,.25);
+  border-radius:10px;overflow:hidden;z-index:300;
+  box-shadow:0 16px 48px rgba(0,0,0,.7);
+  max-height:0;opacity:0;
+  transition:max-height .28s ease,opacity .2s ease;
+  pointer-events:none;
+}
+.search-results.open{max-height:400px;opacity:1;pointer-events:all;overflow-y:auto;}
+.sr-header{padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.sr-item{
+  display:flex;align-items:center;gap:14px;padding:14px 16px;
+  border-bottom:1px solid rgba(0,255,136,.06);
+  text-decoration:none;color:var(--text);transition:background .15s;cursor:pointer;
+}
+.sr-item:last-child{border-bottom:none;}
+.sr-item:hover{background:rgba(0,255,136,.06);}
+.sr-thumb{width:60px;height:38px;border-radius:5px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);}
+.sr-info{}
+.sr-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;color:var(--text);margin-bottom:3px;}
+.sr-tags{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);}
+.sr-empty{padding:24px 16px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:1px;}
+
+/* ARTICLE HERO */
+.article-hero{position:relative;border-bottom:1px solid var(--border);overflow:hidden;}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.025) 1px,transparent 1px);background-size:50px 50px;animation:gmove 22s linear infinite;pointer-events:none;}
+.hero-thumb-wrap{position:relative;z-index:1;padding:40px 52px 0;}
+.hero-thumb{
+  width:100%;max-width:760px;border-radius:14px;
+  border:1px solid rgba(0,255,136,.2);
+  box-shadow:0 20px 60px rgba(0,0,0,.6),var(--gg);
+  display:block;animation:fup .6s .1s both;
+}
+.hero-bar{
+  position:relative;z-index:1;
+  padding:28px 52px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.hero-title-wrap{}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.hero-title{font-family:'Orbitron',monospace;font-size:clamp(1.2rem,3vw,1.85rem);font-weight:700;color:var(--text);line-height:1.25;max-width:580px;}
+.hero-title .g{color:var(--green);}
+
+/* ACTION BUTTONS */
+.action-btns{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:0 52px 36px;
+  position:relative;z-index:1;
+}
+.act-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 22px;border-radius:8px;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;
+  letter-spacing:.7px;text-decoration:none;border:none;cursor:pointer;
+  transition:all .2s;
+}
+.act-yt{background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.35);color:#ff4444;}
+.act-yt:hover{background:rgba(255,0,0,.2);box-shadow:0 0 20px rgba(255,0,0,.3);}
+.act-cmd{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:var(--green);}
+.act-cmd:hover{background:rgba(0,255,136,.16);box-shadow:var(--gg);}
+.act-apk{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.3);color:var(--cyan);}
+.act-apk:hover{background:rgba(0,212,255,.14);box-shadow:var(--gc);}
+
+/* DETAILS CONTENT */
+.details-section{
+  padding:44px 52px 80px;
+  position:relative;z-index:1;
+  max-width:860px;
+}
+.details-label{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--green);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.details-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.details-body{
+  background:var(--bgc);border:1px solid var(--border);border-radius:12px;
+  padding:32px 36px;
+  font-family:'Rajdhani',sans-serif;font-size:1rem;line-height:1.85;color:var(--text);
+  position:relative;overflow:hidden;
+}
+.details-body::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--cyan),var(--green));
+  animation:shimmer 3s linear infinite;background-size:200% 100%;
+}
+@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+
+.details-body .headline{
+  font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:700;
+  color:var(--green);text-shadow:var(--gg);
+  margin-bottom:6px;letter-spacing:.5px;
+}
+.details-body .subline{
+  font-size:1rem;color:var(--text);margin-bottom:20px;
+}
+.details-body p{color:var(--muted);margin-bottom:14px;}
+.details-body p b{color:var(--text);}
+.details-body .included-title{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.details-body .included-title::before{content:'📦';}
+.check-item{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-bottom:8px;font-size:.95rem;color:var(--muted);
+}
+.check-item::before{content:'✅';flex-shrink:0;font-size:.9rem;}
+
+.divider{
+  margin:22px 0;border:none;
+  border-top:1px solid rgba(0,255,136,.15);
+  position:relative;
+}
+.divider::before{
+  content:'━━━━━━━━━━━━━━━';
+  position:absolute;top:-9px;left:0;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--muted);letter-spacing:2px;opacity:.4;
+  background:var(--bgc);padding:0 8px;
+}
+
+.details-body .cmd-note{
+  background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.18);
+  border-radius:8px;padding:14px 18px;margin:16px 0;
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--green);
+}
+.perfect-for{margin:16px 0;}
+.perfect-for .pf-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.pf-item{color:var(--muted);font-size:.95rem;margin-bottom:5px;padding-left:4px;}
+.pf-item::before{content:'• ';color:var(--green);}
+
+.cta-text{
+  font-size:1rem;color:var(--text);margin-top:18px;
+  padding:16px 0 0;border-top:1px solid rgba(0,255,136,.1);
+}
+.brand-tag{
+  margin-top:18px;padding:14px 18px;
+  background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.18);
+  border-radius:8px;text-align:center;
+}
+.brand-name{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;color:var(--green);text-shadow:var(--gg);letter-spacing:1px;}
+.brand-motto{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);margin-top:5px;letter-spacing:1px;}
+
+/* BACK LINK */
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:28px;
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  color:var(--muted);text-decoration:none;letter-spacing:1px;
+  border:1px solid var(--border);border-radius:6px;padding:8px 14px;
+  transition:all .18s;
+}
+.back-link:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:22px 52px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+footer span{color:var(--green);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .topbar{padding:0 16px;}
+  .breadcrumb{padding:10px 20px;}
+  .article-search-wrap{padding:16px 20px;}
+  .search-results{left:20px;right:20px;}
+  .hero-thumb-wrap,.hero-bar,.action-btns{padding-left:20px;padding-right:20px;}
+  .hero-thumb-wrap{padding-top:28px;}
+  .details-section{padding:32px 20px 60px;}
+  .details-body{padding:22px 20px;}
+  footer{padding:18px 20px;}
+}
+@media(max-width:480px){
+  .action-btns{flex-direction:column;}
+  .act-btn{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<canvas id="mc"></canvas>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="tb-logo" href="https://alone-monster.github.io/">ALONE<span>MONSTER</span></a>
+  <div class="tb-right">
+    <a class="tb-link" href="https://alone-monster.github.io/youtube/"><i class="fas fa-play-circle"></i> Tutorials</a>
+    <a class="tb-link cyan" href="https://alone-monster.github.io/"><i class="fas fa-terminal"></i> Home</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="https://alone-monster.github.io/">alone-monster</a>
+  <span class="sep">/</span>
+  <a href="https://alone-monster.github.io/youtube/">youtube</a>
+  <span class="sep">/</span>
+  <span class="cur">vscode-on-mobile-termux</span>
+</div>
+
+<!-- SEARCH (searches youtube tutorials section) -->
+<div class="article-search-wrap" id="searchWrap">
+  <div class="article-search-label">// search all tutorials</div>
+  <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input class="search-input" id="searchInput" type="text"
+           placeholder="Search tutorials — Termux, VS Code, Python, Linux..."
+           oninput="liveSearch()" onkeydown="handleKey(event)" autocomplete="off"/>
+    <button class="search-go" onclick="goSearch()">SEARCH <i class="fas fa-arrow-right"></i></button>
+  </div>
+  <div class="search-hint">// press Enter or click Search to browse all tutorials</div>
+
+  <!-- LIVE SEARCH RESULTS -->
+  <div class="search-results" id="searchResults">
+    <div class="sr-header">// tutorials found</div>
+    <div id="srList"></div>
+  </div>
+</div>
+
+<!-- ARTICLE HERO -->
+<div class="article-hero">
+  <div class="hgrid"></div>
+  <div class="hero-thumb-wrap">
+    <img class="hero-thumb" src="https://alone-monster.github.io/youtube/article-1/thumbnail.png"
+         onerror="this.style.display='none'" alt="VS Code on Mobile Using Termux — Alone Monster"/>
+  </div>
+  <div class="hero-bar">
+    <div class="hero-title-wrap">
+      <div class="hero-tag">// tutorial · termux · vs code</div>
+      <h1 class="hero-title">How To Use <span class="g">VS Code</span> In Mobile Using Termux</h1>
+    </div>
+  </div>
+</div>
+
+<!-- ACTION BUTTONS -->
+<div class="action-btns">
+  <!-- UPDATE THESE LINKS YOURSELF -->
+  <a class="act-btn act-yt" href="#" target="_blank">
+    <i class="fab fa-youtube"></i> YouTube Video
+  </a>
+  <a class="act-btn act-cmd" href="#" target="_blank">
+    <i class="fas fa-terminal"></i> Commands
+  </a>
+  <a class="act-btn act-apk" href="#" target="_blank">
+    <i class="fas fa-download"></i> Termux Apk
+  </a>
+</div>
+
+<!-- DETAILS -->
+<div class="details-section">
+  <a class="back-link" href="https://alone-monster.github.io/youtube/">
+    <i class="fas fa-arrow-left"></i> Back to All Tutorials
+  </a>
+
+  <div class="details-label">Details</div>
+
+  <div class="details-body">
+    <div class="headline">🚀 COMPLETE VS CODE MOBILE SETUP GUIDE 🚀</div>
+    <div class="subline">📱 How To Use VS Code In Mobile Using Termux 💻⚡</div>
+
+    <p>In this content, you'll get the complete setup process to turn your Android phone into a powerful coding machine using <b>Termux + VS Code</b>.</p>
+
+    <div class="included-title">Included In This Setup:</div>
+    <div class="check-item">Termux Download &amp; Installation</div>
+    <div class="check-item">Required Packages Setup</div>
+    <div class="check-item">All Important Terminal Commands</div>
+    <div class="check-item">VS Code Installation Process</div>
+    <div class="check-item">Browser Access Setup</div>
+    <div class="check-item">Coding Environment Configuration</div>
+    <div class="check-item">Extensions &amp; Tools Setup</div>
+    <div class="check-item">Run &amp; Edit Code Directly From Mobile</div>
+
+    <hr class="divider"/>
+
+    <div class="cmd-note">⚡ Full Terminal Commands Included — All commands are provided step-by-step for easy installation and setup.</div>
+
+    <div class="perfect-for">
+      <div class="pf-title">Perfect for:</div>
+      <div class="pf-item">Web Developers</div>
+      <div class="pf-item">Python Programmers</div>
+      <div class="pf-item">JavaScript Learners</div>
+      <div class="pf-item">Students &amp; Beginners</div>
+      <div class="pf-item">Mobile Developers</div>
+    </div>
+
+    <hr class="divider"/>
+
+    <p class="cta-text">🔥 Start coding professionally from your phone without needing a PC.</p>
+    <p>📌 Watch Carefully &amp; Follow Every Step Properly.</p>
+
+    <div class="brand-tag">
+      <div class="brand-name">💀 ALONE MONSTER CODING HUB</div>
+      <div class="brand-motto">"Code • Learn • Build • Repeat"</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div><span>alone-monster</span> $ cat youtube/article-1/index.html</div>
+  <div>Built by <span>Chirag</span> · Alone Monster Coding Hub</div>
+</footer>
+
+<script>
+/* ── Tutorial database (mirrors youtube/index.html articles) ── */
+const TUTORIALS = [
+  {
+    title: "How To Use VS Code In Mobile Using Termux",
+    tags: "vs code vscode mobile termux android terminal linux setup",
+    thumb: "../thumbnail-vscode-termux.png",
+    url: "https://alone-monster.github.io/youtube/article-1/"
+  }
+  /* Add more articles here as objects to keep search up to date */
+];
+
+/* CURSOR */
+const cur = document.getElementById('cursor');
+if(window.matchMedia('(hover:hover)').matches){
+  document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+  document.querySelectorAll('a,button,.act-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+} else { cur.style.display='none'; }
+
+/* RIPPLE */
+document.addEventListener('click', function(e){
+  const r=document.createElement('div'); r.className='ripple';
+  r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px';
+  document.body.appendChild(r); setTimeout(()=>r.remove(),1600);
+});
+
+/* MATRIX */
+const cv=document.getElementById('mc'),cx=cv.getContext('2d');
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+const ch='01アイウエオABCDEFG<>{}[]=+-*/';
+const fs=14;let dr=Array(Math.floor(window.innerWidth/fs)).fill(1);
+setInterval(()=>{
+  cx.fillStyle='rgba(5,5,9,.05)';cx.fillRect(0,0,cv.width,cv.height);
+  cx.fillStyle='#00ff88';cx.font=fs+'px monospace';
+  dr.forEach((y,i)=>{cx.fillText(ch[Math.floor(Math.random()*ch.length)],i*fs,y*fs);if(y*fs>cv.height&&Math.random()>.975)dr[i]=0;dr[i]++;});
+},55);
+
+/* LIVE SEARCH */
+function liveSearch(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const results = document.getElementById('searchResults');
+  const list = document.getElementById('srList');
+  if(!q){ results.classList.remove('open'); return; }
+  const matches = TUTORIALS.filter(t => t.title.toLowerCase().includes(q) || t.tags.includes(q));
+  if(matches.length === 0){
+    list.innerHTML = '<div class="sr-empty">No tutorials found for "'+q+'"</div>';
+  } else {
+    list.innerHTML = matches.map(t=>`
+      <a class="sr-item" href="${t.url}">
+        <img class="sr-thumb" src="${t.thumb}" onerror="this.style.display='none'" alt="${t.title}"/>
+        <div class="sr-info">
+          <div class="sr-title">${t.title}</div>
+          <div class="sr-tags">${t.tags.split(' ').slice(0,5).join(' · ')}</div>
+        </div>
+      </a>`).join('');
+  }
+  results.classList.add('open');
+}
+
+function handleKey(e){
+  if(e.key==='Enter') goSearch();
+  if(e.key==='Escape') document.getElementById('searchResults').classList.remove('open');
+}
+
+function goSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(!q) return;
+  window.location.href = 'https://alone-monster.github.io/youtube/?q=' + encodeURIComponent(q);
+}
+
+/* Close search results on outside click */
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('searchWrap');
+  if(!wrap.contains(e.target)) document.getElementById('searchResults').classList.remove('open');
+});
+
+/* SCROLL REVEAL */
+const rv=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+},{threshold:.06});
+document.querySelectorAll('.details-body,.action-btns,.back-link').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(14px)';
+  el.style.transition='opacity .44s ease,transform .44s ease';
+  rv.observe(el);
+});
+</script>
+</body>
+</html>
