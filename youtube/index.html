@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Courses — Alone Monster</title>
+<meta name="description" content="Free YouTube tutorials by Alone Monster — Termux, VS Code, Linux, Python, Android and more tech guides."/>
+<meta property="og:title" content="Courses — Alone Monster"/>
+<meta property="og:description" content="Free tech tutorials and guides by Chirag — Alone Monster Coding Hub."/>
+<meta property="og:url" content="https://alone-monster.github.io/youtube/"/>
+<meta name="theme-color" content="#00ff88"/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#050509;--bg2:#0c0c14;--bgc:#10101c;--bgs:#08080f;
+  --green:#00ff88;--cyan:#00d4ff;
+  --text:#e8e8f0;--muted:#6b6b8a;
+  --border:rgba(0,255,136,.15);
+  --gg:0 0 20px rgba(0,255,136,.45);
+  --gc:0 0 20px rgba(0,212,255,.45);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;}
+@media(hover:hover){body{cursor:none;}}
+
+/* CURSOR */
+#cursor{position:fixed;width:10px;height:10px;background:var(--green);border-radius:50%;pointer-events:none;z-index:8998;transform:translate(-50%,-50%);transition:transform .08s;mix-blend-mode:screen;}
+#cursor.big{transform:translate(-50%,-50%) scale(2.6);}
+
+/* MATRIX */
+#mc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:.04;pointer-events:none;}
+
+/* RIPPLE */
+.ripple{position:fixed;width:60px;height:60px;border-radius:50%;border:2px solid var(--green);pointer-events:none;z-index:8999;transform:translate(-50%,-50%) scale(0);opacity:1;animation:rout 1.5s ease-out forwards;}
+@keyframes rout{0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}100%{transform:translate(-50%,-50%) scale(4.8);opacity:0;}}
+@keyframes fup{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes gmove{to{background-position:50px 50px;}}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(5,5,9,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;width:100%;}
+.tb-logo{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;color:var(--green);text-shadow:var(--gg);letter-spacing:1px;text-decoration:none;}
+.tb-logo span{color:var(--cyan);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.tb-link{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);border-radius:5px;padding:7px 14px;display:flex;align-items:center;gap:7px;transition:all .18s;}
+.tb-link:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06);}
+.tb-link.cyan{border-color:rgba(0,212,255,.3);}
+.tb-link.cyan:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.06);}
+
+/* HERO */
+.page-hero{padding:56px 52px 44px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.028) 1px,transparent 1px);background-size:50px 50px;animation:gmove 22s linear infinite;pointer-events:none;}
+.page-tag{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;animation:fup .5s .1s both;position:relative;}
+.page-title{font-family:'Orbitron',monospace;font-size:clamp(2rem,5vw,3.6rem);font-weight:900;line-height:1.06;margin-bottom:12px;animation:fup .5s .2s both;position:relative;}
+.page-title .g{color:var(--green);text-shadow:var(--gg);}
+.page-title .c{color:var(--cyan);text-shadow:var(--gc);}
+.page-desc{font-size:.98rem;color:var(--muted);max-width:540px;line-height:1.72;animation:fup .5s .3s both;position:relative;}
+.page-desc b{color:var(--text);}
+
+/* SEARCH AREA */
+.search-area{padding:28px 52px 0;position:relative;z-index:10;animation:fup .5s .35s both;}
+.search-toggle-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;
+  color:var(--muted);letter-spacing:1px;
+  border:1px solid var(--border);border-radius:7px;
+  padding:10px 18px;background:var(--bgc);cursor:pointer;
+  transition:all .2s;
+}
+.search-toggle-btn:hover,.search-toggle-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.07);box-shadow:0 0 16px rgba(0,255,136,.1);}
+.search-toggle-btn i{font-size:.85rem;}
+
+.search-panel{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .32s cubic-bezier(.4,0,.2,1),opacity .25s ease;
+  margin-top:0;
+}
+.search-panel.open{max-height:200px;opacity:1;margin-top:14px;}
+
+.search-box{
+  display:flex;align-items:center;gap:0;
+  max-width:600px;background:var(--bgc);
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.search-box:focus-within{border-color:rgba(0,255,136,.5);box-shadow:0 0 0 3px rgba(0,255,136,.08);}
+.search-box i{padding:0 16px;font-size:.9rem;color:var(--muted);flex-shrink:0;}
+.search-input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:'Rajdhani',sans-serif;font-size:.98rem;font-weight:500;
+  color:var(--text);padding:14px 0;
+}
+.search-input::placeholder{color:var(--muted);}
+.search-clear{background:transparent;border:none;color:var(--muted);padding:0 16px;cursor:pointer;font-size:.85rem;display:none;transition:color .18s;}
+.search-clear.vis{display:block;}
+.search-clear:hover{color:var(--green);}
+.search-hint{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:1px;margin-top:9px;opacity:.7;}
+
+/* STATS BAR */
+.stats-bar{
+  padding:16px 52px;display:flex;align-items:center;gap:22px;
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;
+  color:var(--muted);letter-spacing:1px;
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.stats-bar .sc{color:var(--green);font-weight:700;}
+.stats-bar .dot{width:4px;height:4px;background:var(--border);border-radius:50%;}
+
+/* ARTICLES SECTION */
+.articles-section{padding:38px 52px 90px;position:relative;z-index:1;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.57rem;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:26px;opacity:.7;}
+
+/* ARTICLE CARD */
+.article-card{
+  background:var(--bgc);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;position:relative;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  max-width:820px;margin-bottom:22px;
+}
+.article-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
+  z-index:2;
+}
+.article-card:hover{border-color:rgba(0,255,136,.38);box-shadow:0 16px 50px rgba(0,0,0,.5),var(--gg);transform:translateY(-3px);}
+.article-card:hover::before{transform:scaleX(1);}
+
+.card-inner{display:flex;gap:0;align-items:stretch;}
+
+.card-thumb{
+  width:260px;flex-shrink:0;position:relative;overflow:hidden;
+}
+.card-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;transition:transform .35s ease;
+}
+.article-card:hover .card-thumb img{transform:scale(1.04);}
+.thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 60%,var(--bgc));
+  pointer-events:none;
+}
+
+.card-body{flex:1;padding:26px 28px;display:flex;flex-direction:column;gap:0;}
+
+.card-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;}
+.card-badge{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  padding:3px 11px;border-radius:20px;letter-spacing:1px;
+  background:rgba(0,255,136,.1);color:var(--green);
+  border:1px solid rgba(0,255,136,.22);
+}
+.card-badge.yt{background:rgba(255,0,0,.1);color:#ff4444;border-color:rgba(255,0,0,.25);}
+.card-badge.tool{background:rgba(0,212,255,.08);color:var(--cyan);border-color:rgba(0,212,255,.22);}
+
+.card-title{
+  font-family:'Orbitron',monospace;font-size:.98rem;font-weight:700;
+  color:var(--text);margin-bottom:10px;letter-spacing:.4px;line-height:1.4;
+}
+.card-desc{
+  font-size:.86rem;color:var(--muted);line-height:1.7;
+  flex:1;margin-bottom:18px;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.card-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
+.card-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  padding:3px 9px;border-radius:4px;
+  background:rgba(0,212,255,.05);color:#6b6b8a;
+  border:1px solid rgba(0,212,255,.14);
+}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.card-meta{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.8px;}
+.card-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:7px;
+  background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);
+  color:var(--green);font-family:'Rajdhani',sans-serif;
+  font-weight:700;font-size:.84rem;letter-spacing:.8px;
+  text-decoration:none;transition:all .2s;flex-shrink:0;
+}
+.card-btn:hover{background:rgba(0,255,136,.16);box-shadow:var(--gg);border-color:var(--green);}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:80px 20px;font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.75rem;letter-spacing:1px;display:none;}
+.no-results i{font-size:2.4rem;display:block;margin-bottom:14px;opacity:.25;}
+
+/* TEMPLATE SECTION */
+.template-section{
+  margin:0 52px 60px;padding:24px 28px;
+  border:1px dashed rgba(0,255,136,.2);border-radius:10px;
+  background:rgba(0,255,136,.03);
+  display:none;
+}
+.template-section.show{display:block;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:22px 52px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+footer span{color:var(--green);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .card-thumb{width:200px;}
+}
+@media(max-width:768px){
+  .topbar{padding:0 16px;}
+  .page-hero,.search-area,.stats-bar,.articles-section{padding-left:20px;padding-right:20px;}
+  .page-hero{padding-top:36px;padding-bottom:30px;}
+  footer{padding:18px 20px;}
+  .card-inner{flex-direction:column;}
+  .card-thumb{width:100%;height:200px;}
+  .thumb-overlay{background:linear-gradient(180deg,transparent 60%,var(--bgc));}
+  .template-section{margin-left:20px;margin-right:20px;}
+}
+@media(max-width:480px){
+  .card-body{padding:18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<canvas id="mc"></canvas>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="tb-logo" href="https://alone-monster.github.io/">ALONE<span>MONSTER</span></a>
+  <div class="tb-right">
+    <a class="tb-link" href="https://alone-monster.github.io/apps/"><i class="fas fa-th-large"></i> Apps</a>
+    <a class="tb-link cyan" href="https://alone-monster.github.io/"><i class="fas fa-terminal"></i> Home</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hgrid"></div>
+  <div class="page-tag">// alone-monster · courses &amp; tutorials</div>
+  <h1 class="page-title"><span class="g">YouTube</span> <span class="c">Tutorials</span></h1>
+  <p class="page-desc">In-depth <b>tech tutorials</b> by Chirag — Termux, VS Code, Linux, Android, Python and much more. All free, all practical.</p>
+</div>
+
+<!-- SEARCH AREA -->
+<div class="search-area">
+  <button class="search-toggle-btn" id="searchToggleBtn" onclick="toggleSearch()">
+    <i class="fas fa-search"></i> Search Tutorials
+    <i class="fas fa-chevron-down" id="searchChevron" style="font-size:.6rem;transition:transform .2s;"></i>
+  </button>
+  <div class="search-panel" id="searchPanel">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by title, topic or keyword..." oninput="filterArticles()" autocomplete="off"/>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="search-hint">// type to filter tutorials in real-time</div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <span>TOTAL <span class="sc" id="totalCount">1</span></span>
+  <div class="dot"></div>
+  <span>SHOWING <span class="sc" id="resultCount">1</span></span>
+  <div class="dot"></div>
+  <span>BY <span class="sc">CHIRAG</span></span>
+  <div class="dot"></div>
+  <span>CHANNEL <span class="sc">@UnspokenAesthetic</span></span>
+</div>
+
+<!-- ARTICLES -->
+<section class="articles-section">
+  <div class="section-label">// latest tutorials</div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ARTICLE CARD — COPY THIS BLOCK TO ADD MORE TUTORIALS
+       Update: data-search, card-title, card-desc, card-tags, card-btn href
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="article-card" data-search="vs code vscode mobile termux android terminal linux setup installation coding">
+    <div class="card-inner">
+      <div class="card-thumb">
+        <img src="https://alone-monster.github.io/youtube/thumbnail-vscode-termux.png"
+             onerror="../youtube/thumbnail-vscode-termux.png" alt="VS Code on Mobile with Termux"/>
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="card-badge yt"><i class="fab fa-youtube"></i> YouTube</span>
+          <span class="card-badge">Termux</span>
+          <span class="card-badge tool">VS Code</span>
+        </div>
+        <div class="card-title">How To Use VS Code In Mobile Using Termux</div>
+        <p class="card-desc">Complete VS Code mobile setup guide — turn your Android phone into a powerful coding machine using Termux and VS Code. Includes installation, packages, commands, browser access, extensions and live coding setup.</p>
+        <div class="card-tags">
+          <span class="card-tag">Termux</span>
+          <span class="card-tag">VS Code</span>
+          <span class="card-tag">Android</span>
+          <span class="card-tag">Linux</span>
+          <span class="card-tag">Terminal</span>
+          <span class="card-tag">Mobile Dev</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">ALONE MONSTER CODING HUB</span>
+          <a class="card-btn" href="https://alone-monster.github.io/youtube/article-1/">
+            <i class="fas fa-arrow-right"></i> View Details
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END ARTICLE CARD -->
+
+  <div class="no-results" id="noResults">
+    <i class="fas fa-search"></i>
+    No tutorials found matching your search.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><span>alone-monster</span> $ ls youtube/ — <span id="yr"></span></div>
+  <div>Built by <span>Chirag</span> · Alone Monster Coding Hub</div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* CURSOR */
+const cur = document.getElementById('cursor');
+if(window.matchMedia('(hover:hover)').matches){
+  document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+  document.querySelectorAll('a,button,.article-card,.card-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+} else { cur.style.display='none'; }
+
+/* RIPPLE */
+document.addEventListener('click', function(e){
+  const r=document.createElement('div'); r.className='ripple';
+  r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px';
+  document.body.appendChild(r); setTimeout(()=>r.remove(),1600);
+});
+
+/* MATRIX */
+const cv=document.getElementById('mc'),cx=cv.getContext('2d');
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+const ch='01アイウエオABCDEFG<>{}[]=+-*/';
+const fs=14;let dr=Array(Math.floor(window.innerWidth/fs)).fill(1);
+setInterval(()=>{
+  cx.fillStyle='rgba(5,5,9,.05)';cx.fillRect(0,0,cv.width,cv.height);
+  cx.fillStyle='#00ff88';cx.font=fs+'px monospace';
+  dr.forEach((y,i)=>{cx.fillText(ch[Math.floor(Math.random()*ch.length)],i*fs,y*fs);if(y*fs>cv.height&&Math.random()>.975)dr[i]=0;dr[i]++;});
+},55);
+
+/* SEARCH TOGGLE */
+function toggleSearch(){
+  const panel=document.getElementById('searchPanel');
+  const btn=document.getElementById('searchToggleBtn');
+  const chev=document.getElementById('searchChevron');
+  const isOpen=panel.classList.contains('open');
+  panel.classList.toggle('open');
+  btn.classList.toggle('active');
+  chev.style.transform=isOpen?'':'rotate(180deg)';
+  if(!isOpen) setTimeout(()=>document.getElementById('searchInput').focus(),350);
+}
+
+/* SEARCH FILTER */
+const cards=document.querySelectorAll('.article-card');
+function filterArticles(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  document.getElementById('searchClear').classList.toggle('vis',q.length>0);
+  let visible=0;
+  cards.forEach(c=>{
+    const match=c.dataset.search.includes(q)||c.querySelector('.card-title').textContent.toLowerCase().includes(q)||c.querySelector('.card-desc').textContent.toLowerCase().includes(q);
+    c.style.display=match?'':'none';
+    if(match)visible++;
+  });
+  document.getElementById('resultCount').textContent=visible;
+  document.getElementById('noResults').style.display=visible===0?'block':'none';
+}
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  filterArticles();
+  document.getElementById('searchInput').focus();
+}
+
+/* CHECK URL PARAMS (from article detail page search) */
+const urlQ=new URLSearchParams(window.location.search).get('q');
+if(urlQ){
+  document.getElementById('searchInput').value=urlQ;
+  document.getElementById('searchPanel').classList.add('open');
+  document.getElementById('searchToggleBtn').classList.add('active');
+  document.getElementById('searchChevron').style.transform='rotate(180deg)';
+  filterArticles();
+}
+
+/* SCROLL REVEAL */
+const rv=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+},{threshold:.06});
+document.querySelectorAll('.article-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .45s ease,transform .45s ease';
+  rv.observe(el);
+});
+</script>
+</body>
+</html>
