@@ -108,7 +108,7 @@
     body{
       font-family:'Rajdhani',sans-serif;
       background:var(--bg); color:var(--text);
-      overflow-x:hidden; width:100%; max-width:100vw;
+      overflow-x:hidden; overflow-y:auto; width:100%; max-width:100vw;
     }
     @media(hover:hover){body{cursor:none;}}
 
@@ -1154,7 +1154,6 @@ ALONE MONSTER CODING HUB
         <a href="https://x.com/naskar_chi26012"             target="_blank" class="ccard"><i class="fab fa-x-twitter" style="color:#ccc;"></i><div><div class="clbl">X (Twitter)</div><div class="cval">@naskar_chi26012</div></div></a>
         <a href="https://t.me/AloneMonster_Robot"           target="_blank" class="ccard"><i class="fab fa-telegram" style="color:#00d4ff;"></i><div><div class="clbl">Telegram AI Bot</div><div class="cval">@AloneMonster_Robot</div></div></a>
         <a href="https://discord.com/oauth2/authorize?client_id=1493033487211434176" target="_blank" class="ccard"><i class="fab fa-discord" style="color:#7289da;"></i><div><div class="clbl">Discord AI Bot</div><div class="cval">Add to Your Server</div></div></a>
-        <a href="https://wa.me/919531677062" target="_blank" class="ccard cspan" style="grid-column:span 2;"><i class="fab fa-whatsapp" style="color:#25d366;"></i><div><div class="clbl">WhatsApp</div><div class="cval">+91 95316 77062 — Click to message</div></div></a>
       </div>
     </section>
 
@@ -1319,25 +1318,10 @@ ALONE MONSTER CODING HUB
 const RENDER_PROXY = 'https://ai-proxy-vq3q.onrender.com/proxy';
 
 const AI_MODELS = [
-  // ── Alone Monster v2 — Direct API (safe, key chhupa nahi) ────────────────
-  { id:'alone-monster',     name:'Alone Monster AI',           desc:"Chirag's custom model",          badge:'free', dot:'',     useProxy:false, apiUrl:'https://api.xiaomimimo.com/v1/chat/completions', apiKey:'sk-si3fhtkugft1p7ho5jlngxc8f95nvk5xxzkxfibg738nsdxo', model:'mimo-v2-flash' },
-
-  // ── Groq — Render Proxy se ───────────────────────────────────────────────
-  { id:'groq-llama',        name:'Llama 3.3 70B (Groq)',       desc:'Meta via Groq — blazing fast',   badge:'fast', dot:'cyan', useProxy:true,  provider:'groq',    model:'llama-3.3-70b-versatile' },
-  { id:'groq-llama-fast',   name:'Llama 3.1 8B (Groq)',        desc:'Meta via Groq — ultra fast',     badge:'fast', dot:'cyan', useProxy:true,  provider:'groq',    model:'llama-3.1-8b-instant' },
-
-  // ── Gemini — Render Proxy se ─────────────────────────────────────────────
-
-  // ── Cerebras — Direct (placeholder key) ──────────────────────────────────
-  { id:'cerebras-llama70b', name:'Llama 3.1 70B (Cerebras)',   desc:'Cerebras — insanely fast free',  badge:'fast', dot:'pink', useProxy:false, apiUrl:'https://api.cerebras.ai/v1/chat/completions', apiKey:'YOUR_CEREBRAS_API_KEY', model:'llama3.1-70b' },
-  { id:'cerebras-llama8b',  name:'Llama 3.1 8B (Cerebras)',    desc:'Cerebras — fastest free model',  badge:'free', dot:'pink', useProxy:false, apiUrl:'https://api.cerebras.ai/v1/chat/completions', apiKey:'YOUR_CEREBRAS_API_KEY', model:'llama3.1-8b' },
-
-  // ── OpenRouter — Direct (placeholder key) ────────────────────────────────
-  { id:'openrouter-llama',  name:'Llama 3.1 8B (OpenRouter)',  desc:'OpenRouter — free open model',   badge:'free', dot:'',     useProxy:false, apiUrl:'https://openrouter.ai/api/v1/chat/completions', apiKey:'YOUR_OPENROUTER_API_KEY', model:'meta-llama/llama-3.1-8b-instruct:free' },
-  { id:'openrouter-mistral',name:'Mistral 7B (OpenRouter)',     desc:'OpenRouter — free multilingual', badge:'free', dot:'',     useProxy:false, apiUrl:'https://openrouter.ai/api/v1/chat/completions', apiKey:'YOUR_OPENROUTER_API_KEY', model:'mistralai/mistral-7b-instruct:free' },
+  { id:'groq-llama', name:'Llama 3.3 70B (Groq)', desc:'Meta via Groq — blazing fast & free', badge:'fast', dot:'cyan', useProxy:true, provider:'groq', model:'llama-3.3-70b-versatile' },
 ];
 
-let activeModelId = 'alone-monster';
+let activeModelId = 'groq-llama';
 function getActiveModel(){ return AI_MODELS.find(m=>m.id===activeModelId)||AI_MODELS[0]; }
 
 /* ── Build model dropdown ── */
@@ -1511,7 +1495,6 @@ Python, JavaScript, Android Dev, AI/ML, Linux, Web Dev, Telegram Bots, Discord B
 === CONTACT ===
 YouTube: @UnspokenAesthetic | GitHub: chiragalonemonster | Instagram: @anxiety4410
 Facebook: chirag.alonemonster | Telegram: @alonemonster20 | X: @naskar_chi26012
-WhatsApp: +91 95316 77062 | Bot: @AloneMonster_Robot
 
 === PERSONALITY ===
 Friendly, helpful tech assistant. Use emojis occasionally. Keep responses concise but complete.`;
@@ -1604,7 +1587,6 @@ function aiGetAboutHTML(){
     <div class="ai-about-row"><span class="ai-about-key">📺</span><span class="ai-about-val"><strong>YouTube:</strong> @UnspokenAesthetic</span></div>
     <div class="ai-about-row"><span class="ai-about-key">🐙</span><span class="ai-about-val"><strong>GitHub:</strong> chiragalonemonster</span></div>
     <div class="ai-about-row"><span class="ai-about-key">📱</span><span class="ai-about-val"><strong>Social:</strong> @anxiety4410 (IG) · @alonemonster20 (TG) · @naskar_chi26012 (X)</span></div>
-    <div class="ai-about-row"><span class="ai-about-key">📞</span><span class="ai-about-val"><strong>WhatsApp:</strong> +91 95316 77062</span></div>
     <div class="ai-about-row"><span class="ai-about-key">🛠️</span><span class="ai-about-val"><strong>Skills:</strong> Python · JS · AI/ML · Android · Linux · Web Dev · Bots · APIs</span></div>
     <div class="ai-about-row"><span class="ai-about-key">🚀</span><span class="ai-about-val"><strong>Journey:</strong> Python → Android → YouTube → AI Bots → Creating every day!</span></div>
   </div>`;
